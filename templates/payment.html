@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment — VB2026</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    .payment-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .team-summary {
+      background: rgba(244, 169, 31, 0.08);
+      border: 1px solid rgba(244, 169, 31, 0.25);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .team-summary-item .lbl {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--white-dim);
+    }
+
+    .team-summary-item .val {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: var(--white);
+      margin-top: 2px;
+    }
+
+    .team-summary-item .val.id {
+      color: var(--net-gold);
+      font-size: 1rem;
+    }
+
+    .payment-card {
+      margin-bottom: 20px;
+    }
+
+    .fee-display {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .fee-amount {
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: var(--net-gold);
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+
+    .fee-label {
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      margin-top: 4px;
+    }
+
+    .upi-section {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+      margin: 24px 0;
+      padding: 20px;
+      background: var(--white-faint);
+      border-radius: 12px;
+    }
+
+    .upi-id {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--white);
+      margin: 8px 0;
+      word-break: break-all;
+    }
+
+    .upi-id-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--net-gold);
+    }
+
+    .qr-box {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: #333;
+      text-align: center;
+      padding: 8px;
+      flex-shrink: 0;
+    }
+
+    .qr-box canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .steps-indicator {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .step-pill.done {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success);
+    }
+
+    .step-pill.active {
+      background: rgba(244, 169, 31, 0.15);
+      color: var(--net-gold);
+    }
+
+    .step-pill.pending-step {
+      background: var(--white-faint);
+      color: var(--white-dim);
+    }
+
+    .pay-btn-row {
+      margin: 20px 0;
+    }
+
+    .upload-section {
+      margin-top: 8px;
+    }
+
+    .upload-submit-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .note-box {
+      background: rgba(244, 169, 31, 0.06);
+      border-left: 3px solid var(--net-gold);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 20px;
+      font-size: 0.83rem;
+      color: var(--white-dim);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">VB<span>2026</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/register">Register</a></li>
+      <li><a href="/admin">Admin</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <div class="payment-wrap">
+
+      <div class="page-head animate-up">
+        <p class="section-label">Step 2 of 3</p>
+        <h1 class="section-title" style="font-size:3rem;">COMPLETE<br>PAYMENT</h1>
+      </div>
+
+      <!-- Progress steps -->
+      <div class="steps-indicator animate-up-2">
+        <div class="step-pill done">✓ Registered</div>
+        <div class="step-pill active">● Pay Now</div>
+        <div class="step-pill pending-step">○ Confirmation</div>
+      </div>
+
+      <!-- Team summary -->
+      <div class="team-summary animate-up-3" id="teamSummary">
+        <div class="team-summary-item">
+          <div class="lbl">Team ID</div>
+          <div class="val id" id="sumTeamId">—</div>
+        </div>
+        <div class="team-summary-item">
+          <div class="lbl">Team Name</div>
+          <div class="val" id="sumTeamName">—</div>
+        </div>
+        <div class="team-summary-item">
+          <div class="lbl">Captain</div>
+          <div class="val" id="sumCaptain">—</div>
+        </div>
+      </div>
+
+      <!-- Payment card -->
+      <div class="card payment-card animate-up-4">
+        <div class="fee-display">
+          <div class="fee-amount">₹200</div>
+          <div class="fee-label">Tournament Entry Fee</div>
+        </div>
+
+        <div class="note-box">
+          Pay using any UPI app (GPay, PhonePe, Paytm, etc.) by scanning the QR code or using the UPI ID below. After
+          payment, upload your payment confirmation screenshot.
+        </div>
+
+        <div class="upi-section">
+          <div>
+            <div class="upi-id-label">UPI ID</div>
+            <div class="upi-id">sshamu46@okhdfcbank</div>
+            <p class="text-dim" style="font-size:0.8rem; margin-top:4px;">Payee: VB Tournament 2026</p>
+            <div class="pay-btn-row">
+              <a href="upi://pay?pa=sshamu46@okhdfcbank&pn=VB%20Tournament%202026&am=200&cu=INR" target="_blank"
+                rel="noopener" class="btn btn-primary" id="upiPayBtn">
+                Open UPI App ↗
+              </a>
+            </div>
+          </div>
+          <div class="qr-box" id="qrContainer">
+            <div style="text-align:center; color:#333; font-size:0.6rem; padding:4px;">
+              QR Code<br>Scan to Pay<br>₹200
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload section -->
+      <div class="card animate-up-4">
+        <h3 style="font-family: var(--font-display); font-size:1.5rem; letter-spacing:2px; margin-bottom:8px;">
+          UPLOAD PAYMENT PROOF
+        </h3>
+        <p class="text-dim mb-16" style="font-size:0.85rem;">
+          Take a screenshot of your payment confirmation and upload it here.
+        </p>
+
+        <div class="upload-section">
+          <div class="file-drop" id="fileDrop">
+            <div class="icon">📸</div>
+            <p><strong>Click to browse</strong> or drag & drop your screenshot here</p>
+            <p style="margin-top:6px; font-size:0.75rem;">PNG, JPG, JPEG, WEBP · Max 5MB</p>
+            <input type="file" id="screenshotFile" accept="image/*" style="display:none" />
+          </div>
+          <div class="file-preview" id="filePreview">
+            <img id="previewImg" src="" alt="Payment screenshot" />
+          </div>
+          <div class="form-error" id="uploadError" style="display:none; margin-top:8px;"></div>
+        </div>
+
+        <div class="upload-submit-row">
+          <button class="btn btn-primary" id="uploadBtn" disabled>
+            Submit Payment Proof →
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="/static/js/main.js"></script>
+  <script src="/static/js/payment.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+/* ── Index Page Styles ─────────────────────────────── */
+
+.hero {
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  padding: 60px 40px;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-content { display: flex; flex-direction: column; gap: 28px; }
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 10vw, 8rem);
+  letter-spacing: 4px;
+  line-height: 0.92;
+  color: var(--white);
+}
+
+.outline-text {
+  -webkit-text-stroke: 2px var(--net-gold);
+  color: transparent;
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--white-dim);
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* ── Hero Graphic ───────────────────────────────────── */
+.hero-graphic {
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ball-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(244,169,31,0.15);
+  animation: rotateRing 12s linear infinite;
+}
+
+.ring-1 { width: 320px; height: 320px; border-width: 2px; border-color: rgba(244,169,31,0.2); }
+.ring-2 { width: 240px; height: 240px; animation-direction: reverse; animation-duration: 8s; }
+.ring-3 { width: 160px; height: 160px; border-color: rgba(232,83,26,0.2); animation-duration: 6s; }
+
+@keyframes rotateRing {
+  from { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.05); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+.volleyball-icon {
+  font-size: 7rem;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 8px 24px rgba(244,169,31,0.3));
+  z-index: 1;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+/* ── Details grid ───────────────────────────────────── */
+.details-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.info-card {
+  text-align: center;
+  padding: 32px 20px;
+  transition: transform 0.2s;
+}
+
+.info-card:hover { transform: translateY(-4px); }
+
+.info-icon { font-size: 2rem; margin-bottom: 12px; }
+
+.info-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--white-dim);
+  margin-bottom: 8px;
+}
+
+.info-value {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+  color: var(--net-gold);
+  margin-bottom: 4px;
+}
+
+/* ── Steps ──────────────────────────────────────────── */
+.steps-section {
+  padding: 80px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.steps-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.step-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.step-num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--net-gold);
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.step-card h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.step-card p { font-size: 0.82rem; line-height: 1.5; }
+
+.step-arrow {
+  font-size: 1.5rem;
+  color: var(--net-gold);
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+/* ── Rules ──────────────────────────────────────────── */
+.rules-section {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 40px 80px;
+}
+
+.rules-card { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+
+.rules-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-self: center;
+}
+
+.rules-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: 0.88rem;
+  color: var(--white-dim);
+  line-height: 1.5;
+}
+
+.rule-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--net-gold);
+  background: rgba(244,169,31,0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--glass-border);
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-graphic { display: none; }
+  .details-grid { grid-template-columns: repeat(2, 1fr); }
+  .rules-card { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 40px 20px; }
+  .details-section, .steps-section, .rules-section { padding-inline: 20px; }
+  .details-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .step-card { padding: 20px 16px; }
+  .footer { flex-direction: column; gap: 8px; text-align: center; }
+}

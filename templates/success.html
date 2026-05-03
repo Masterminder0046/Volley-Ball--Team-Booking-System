@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registration Confirmed — VB2026</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    .success-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      text-align: center;
+    }
+    .success-icon {
+      font-size: 5rem;
+      margin-bottom: 24px;
+      animation: bounceIn 0.6s ease;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      60% { transform: scale(1.1); }
+      80% { transform: scale(0.95); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .success-heading {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      letter-spacing: 4px;
+      color: var(--net-gold);
+      margin-bottom: 12px;
+    }
+    .success-sub {
+      color: var(--white-dim);
+      font-size: 1rem;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+    .confirm-card {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .confirm-row:last-child { border-bottom: none; }
+    .confirm-label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--white-dim); }
+    .confirm-value { font-family: var(--font-mono); font-size: 0.92rem; color: var(--white); }
+    .confirm-value.highlight { color: var(--net-gold); font-size: 1rem; font-weight: 700; }
+    .status-block {
+      background: rgba(244,169,31,0.08);
+      border: 1px solid rgba(244,169,31,0.25);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .status-block h4 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      color: var(--net-gold);
+      margin-bottom: 8px;
+    }
+    .status-block p { font-size: 0.88rem; color: var(--white-dim); line-height: 1.6; }
+    .next-steps {
+      margin-bottom: 32px;
+    }
+    .next-steps h3 {
+      font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--white-dim);
+      margin-bottom: 12px;
+    }
+    .next-step-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-bottom: 12px; font-size: 0.88rem; color: var(--white-dim);
+    }
+    .next-step-item .num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(244,169,31,0.15);
+      color: var(--net-gold);
+      padding: 2px 8px; border-radius: 4px; flex-shrink: 0;
+    }
+    .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .confetti-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+    .confetti-piece {
+      position: absolute;
+      top: -10px;
+      width: 8px; height: 8px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo">VB<span>2026</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/register">Register</a></li>
+  </ul>
+</nav>
+
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<div class="page">
+  <div class="success-wrap">
+
+    <div class="success-icon animate-up">🏆</div>
+    <h1 class="success-heading animate-up-2">SLOT RESERVED!</h1>
+    <p class="success-sub animate-up-3">
+      Your team has been registered for VB Tournament 2026.<br>
+      Your slot is held — pending payment verification.
+    </p>
+
+    <!-- Confirmation card -->
+    <div class="card confirm-card animate-up-4">
+      <div class="confirm-row">
+        <span class="confirm-label">Team ID</span>
+        <span class="confirm-value highlight" id="confTeamId">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-label">Team Name</span>
+        <span class="confirm-value" id="confTeamName">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-label">Captain</span>
+        <span class="confirm-value" id="confCaptain">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-label">Team Size</span>
+        <span class="confirm-value" id="confSize">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-label">Hometown</span>
+        <span class="confirm-value" id="confHometown">—</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-label">Registration Status</span>
+        <span class="badge badge-pending">Pending Approval</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-label">Payment Status</span>
+        <span class="badge badge-pending" id="paymentBadge">Pending Verification</span>
+      </div>
+    </div>
+
+    <!-- Status message -->
+    <div class="status-block animate-up">
+      <h4>⏳ AWAITING VERIFICATION</h4>
+      <p>
+        Your slot is reserved. Our team will verify your payment within 24 hours and update your registration status. You'll be notified once approved.
+      </p>
+    </div>
+
+    <!-- Next steps -->
+    <div class="next-steps animate-up card">
+      <h3>What's Next</h3>
+      <div class="next-step-item">
+        <span class="num">01</span>
+        <span>If you haven't paid yet, <a href="#" id="payNowLink" class="text-gold">proceed to payment →</a></span>
+      </div>
+      <div class="next-step-item">
+        <span class="num">02</span>
+        <span>Keep your Team ID <strong id="remindId" class="text-gold">—</strong> safe for future reference</span>
+      </div>
+      <div class="next-step-item">
+        <span class="num">03</span>
+        <span>Once approved, report to the venue on March 15, 2026 at 8:00 AM</span>
+      </div>
+    </div>
+
+    <div class="cta-row animate-up">
+      <a href="/" class="btn btn-ghost">← Back to Home</a>
+      <a href="#" class="btn btn-primary" id="paymentLinkBtn">Go to Payment →</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/success.js"></script>
+</body>
+</html>

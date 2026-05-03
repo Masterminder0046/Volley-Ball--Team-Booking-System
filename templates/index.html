@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VB2026 — Volleyball Tournament</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/index.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">VB<span>2026</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/register">Register</a></li>
+    <li><a href="/admin">Admin</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <p class="section-label animate-up">Open Registration · 2026</p>
+        <h1 class="hero-title animate-up-2">
+          VOLLEYBALL<br>
+          <span class="outline-text">TOURNAMENT</span>
+        </h1>
+        <p class="hero-sub animate-up-3">
+          Secure your team's slot. Compete for glory.<br>
+          Register now before slots run out.
+        </p>
+
+        <!-- Slot counter -->
+        <div class="slot-banner animate-up-4" id="slotBanner">
+          <div>
+            <div class="slot-numbers">
+              <span class="slot-available" id="slotsAvail">—</span>
+              <span class="slot-divider">/</span>
+              <span class="slot-total" id="slotsTotal">16</span>
+            </div>
+            <div class="slot-label">Slots Available</div>
+          </div>
+          <div class="slot-bar-wrap">
+            <div class="slot-bar">
+              <div class="slot-bar-fill" id="slotFill" style="width:0%"></div>
+            </div>
+            <div class="slot-bar-label text-dim mt-8" id="slotBarLabel" style="font-size:0.75rem;"></div>
+          </div>
+        </div>
+
+        <div class="closed-banner" id="closedBanner">
+          <h3>⛔ REGISTRATIONS CLOSED</h3>
+          <p class="text-dim">All 16 slots have been filled. See you next season!</p>
+        </div>
+
+        <div class="hero-cta animate-up-4" id="heroCta">
+          <a href="/register" class="btn btn-primary btn-lg" id="registerBtn">
+            <span>🏐</span> Register Your Team
+          </a>
+          <a href="#details" class="btn btn-ghost btn-lg">Learn More</a>
+        </div>
+      </div>
+
+      <div class="hero-graphic">
+        <div class="ball-ring ring-1"></div>
+        <div class="ball-ring ring-2"></div>
+        <div class="ball-ring ring-3"></div>
+        <div class="volleyball-icon">🏐</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Details -->
+  <section class="details-section" id="details">
+    <div class="details-grid">
+
+      <div class="card info-card animate-up">
+        <div class="info-icon">📅</div>
+        <h3 class="info-title">Tournament Date</h3>
+        <p class="info-value">March 15–16, 2026</p>
+        <p class="text-dim" style="font-size:0.85rem">Two-day championship event</p>
+      </div>
+
+      <div class="card info-card animate-up-2">
+        <div class="info-icon">📍</div>
+        <h3 class="info-title">Venue</h3>
+        <p class="info-value">Sports Complex, Chennai</p>
+        <p class="text-dim" style="font-size:0.85rem">Indoor court, professional standard</p>
+      </div>
+
+      <div class="card info-card animate-up-3">
+        <div class="info-icon">💰</div>
+        <h3 class="info-title">Entry Fee</h3>
+        <p class="info-value">₹200 / Team</p>
+        <p class="text-dim" style="font-size:0.85rem">One-time registration fee via UPI</p>
+      </div>
+
+      <div class="card info-card animate-up-4">
+        <div class="info-icon">🏆</div>
+        <h3 class="info-title">Prize Pool</h3>
+        <p class="info-value">₹10,000+</p>
+        <p class="text-dim" style="font-size:0.85rem">Trophy + cash prizes for top 3</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="steps-section">
+    <p class="section-label text-center">Registration Flow</p>
+    <h2 class="section-title text-center" style="font-size:2.5rem; margin-bottom:48px;">HOW IT WORKS</h2>
+    <div class="steps-row">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h4>Register Team</h4>
+        <p class="text-dim">Fill in your team details and captain information to reserve a slot.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h4>Pay Entry Fee</h4>
+        <p class="text-dim">Pay ₹200 via UPI and upload your payment screenshot.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h4>Await Approval</h4>
+        <p class="text-dim">Admin verifies payment and confirms your slot within 24hrs.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <h4>Compete!</h4>
+        <p class="text-dim">Show up on match day and give it your all on the court.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rules -->
+  <section class="rules-section">
+    <div class="card rules-card">
+      <div class="rules-header">
+        <p class="section-label">Tournament Rules</p>
+        <h2 class="section-title" style="font-size:2rem;">KNOW THE GAME</h2>
+      </div>
+      <ul class="rules-list">
+        <li><span class="rule-num">R01</span> Teams must have 6–12 registered players</li>
+        <li><span class="rule-num">R02</span> Each team captain must be reachable on the registered phone</li>
+        <li><span class="rule-num">R03</span> Payment must be completed within 48 hours of registration</li>
+        <li><span class="rule-num">R04</span> Slot is confirmed only after admin payment approval</li>
+        <li><span class="rule-num">R05</span> Standard FIVB volleyball rules apply during matches</li>
+        <li><span class="rule-num">R06</span> Teams arriving late forfeit their match</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="text-dim" style="font-size:0.82rem;">
+      © 2026 VB Tournament · For queries contact: <span class="text-gold">tournament@vb2026.in</span>
+    </p>
+    <a href="/admin" class="text-dim" style="font-size:0.75rem; text-decoration:none;">Admin Panel ↗</a>
+  </footer>
+
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="/static/js/main.js"></script>
+<script>
+  loadSlots();
+</script>
+</body>
+</html>

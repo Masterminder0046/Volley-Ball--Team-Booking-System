@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register Team — VB2026</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    .register-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+    .page-head { margin-bottom: 36px; }
+    .team-id-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(244,169,31,0.1);
+      border: 1px solid rgba(244,169,31,0.3);
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 24px;
+    }
+    .team-id-badge .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: var(--white-dim); }
+    .team-id-badge .value { font-family: var(--font-mono); font-size: 1rem; color: var(--net-gold); font-weight: 700; }
+    .slot-mini {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--white-faint);
+      border-radius: 8px;
+      margin-bottom: 28px;
+      font-size: 0.85rem;
+    }
+    .slot-mini .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      flex-shrink: 0;
+      animation: pulse-glow 2s infinite;
+    }
+    .slot-mini .dot.full { background: var(--danger); animation: none; }
+    .form-submit-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .terms-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 20px;
+      font-size: 0.85rem;
+      color: var(--white-dim);
+    }
+    .terms-check input[type=checkbox] {
+      width: 16px; height: 16px;
+      accent-color: var(--net-gold);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo">VB<span>2026</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/register">Register</a></li>
+    <li><a href="/admin">Admin</a></li>
+  </ul>
+</nav>
+
+<div class="page">
+  <div class="register-wrap">
+
+    <div class="page-head animate-up">
+      <p class="section-label">Team Registration</p>
+      <h1 class="section-title" style="font-size:3rem;">REGISTER<br>YOUR TEAM</h1>
+    </div>
+
+    <!-- Slot status mini -->
+    <div class="slot-mini animate-up-2" id="slotMini">
+      <div class="dot" id="slotDot"></div>
+      <span id="slotMiniText">Loading slot info…</span>
+    </div>
+
+    <!-- Closed banner -->
+    <div class="closed-banner" id="closedBanner">
+      <h3>⛔ REGISTRATIONS CLOSED</h3>
+      <p class="text-dim">All slots have been filled. Please check back for the next tournament.</p>
+    </div>
+
+    <!-- Form -->
+    <div class="card animate-up-3" id="formCard">
+      <div class="team-id-badge">
+        <div>
+          <div class="label">Auto-assigned Team ID</div>
+          <div class="value" id="teamIdDisplay">Generating…</div>
+        </div>
+      </div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Team Name *</label>
+            <input type="text" class="form-input" id="teamName" placeholder="e.g. Spike Masters" maxlength="60" required />
+            <div class="form-error" id="errTeamName">Team name is required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Captain Name *</label>
+            <input type="text" class="form-input" id="captainName" placeholder="Full name" maxlength="60" required />
+            <div class="form-error" id="errCaptainName">Captain name is required</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" class="form-input" id="phone" placeholder="10-digit mobile number" maxlength="10" required />
+            <div class="form-error" id="errPhone">Valid 10-digit phone number required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Number of Players *</label>
+            <select class="form-select" id="teamSize" required>
+              <option value="">Select team size</option>
+              <option value="6">6 Players</option>
+              <option value="7">7 Players</option>
+              <option value="8">8 Players</option>
+              <option value="9">9 Players</option>
+              <option value="10">10 Players</option>
+              <option value="11">11 Players</option>
+              <option value="12">12 Players</option>
+            </select>
+            <div class="form-error" id="errTeamSize">Team size is required (6–12)</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Home Town / City *</label>
+          <input type="text" class="form-input" id="hometown" placeholder="City or district you represent" maxlength="80" required />
+          <div class="form-error" id="errHometown">Hometown is required</div>
+        </div>
+
+        <div class="terms-check">
+          <input type="checkbox" id="termsAgree" />
+          <label for="termsAgree">
+            I confirm all team details are accurate and agree to the tournament rules. I understand that slot confirmation requires payment verification.
+          </label>
+        </div>
+
+        <div class="form-submit-row">
+          <a href="/" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary" id="submitBtn">
+            Reserve Slot →
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/register.js"></script>
+</body>
+</html>

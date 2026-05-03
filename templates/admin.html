@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — VB2026</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    /* Login screen */
+    .login-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--court-blue);
+    }
+    .login-card { width: 100%; max-width: 400px; }
+    .login-card .logo { font-family: var(--font-display); font-size: 2.5rem; letter-spacing: 4px; margin-bottom: 8px; }
+    .login-card .logo span { color: var(--net-gold); }
+    .login-card .sub { color: var(--white-dim); font-size: 0.85rem; margin-bottom: 28px; }
+
+    /* Admin layout */
+    .admin-layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 64px); }
+    .sidebar {
+      background: rgba(10,22,40,0.9);
+      border-right: 1px solid var(--glass-border);
+      padding: 32px 20px;
+      position: sticky; top: 64px; height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+    .sidebar-title { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--white-dim); margin-bottom: 12px; }
+    .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-nav li a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: 8px;
+      color: var(--white-dim); text-decoration: none; font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .sidebar-nav li a:hover, .sidebar-nav li a.active {
+      background: var(--white-faint); color: var(--white);
+    }
+    .sidebar-nav li a.active { color: var(--net-gold); }
+
+    /* Main content */
+    .admin-main { padding: 32px; overflow-y: auto; }
+
+    /* Stats row */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { padding: 20px; }
+    .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--white-dim); margin-bottom: 8px; }
+    .stat-value { font-family: var(--font-display); font-size: 2.5rem; letter-spacing: 2px; }
+    .stat-value.gold { color: var(--net-gold); }
+    .stat-value.green { color: var(--success); }
+    .stat-value.red { color: var(--danger); }
+    .stat-value.blue { color: #60a5fa; }
+
+    /* Table */
+    .table-controls {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+    }
+    .search-input {
+      background: var(--white-faint); border: 1px solid var(--glass-border);
+      border-radius: 8px; padding: 10px 16px; color: var(--white);
+      font-family: var(--font-body); font-size: 0.88rem; outline: none;
+      transition: border-color 0.2s; width: 260px;
+    }
+    .search-input:focus { border-color: var(--net-gold); }
+    .filter-tabs { display: flex; gap: 6px; }
+    .filter-tab {
+      padding: 6px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; border: 1px solid var(--glass-border); background: transparent;
+      color: var(--white-dim); transition: all 0.15s;
+    }
+    .filter-tab.active { background: var(--net-gold); color: var(--court-blue); border-color: var(--net-gold); }
+
+    .teams-table { width: 100%; border-collapse: collapse; }
+    .teams-table th {
+      font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--white-dim); padding: 10px 12px; text-align: left;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .teams-table td {
+      padding: 14px 12px; border-bottom: 1px solid rgba(30,58,95,0.4);
+      font-size: 0.86rem; vertical-align: middle;
+    }
+    .teams-table tr:last-child td { border-bottom: none; }
+    .teams-table tr:hover td { background: var(--white-faint); }
+    .team-id-cell { font-family: var(--font-mono); font-size: 0.8rem; color: var(--net-gold); }
+    .actions-cell { display: flex; gap: 6px; }
+    .action-btn {
+      padding: 5px 10px; border-radius: 5px; font-size: 0.72rem; font-weight: 600;
+      cursor: pointer; border: 1px solid; transition: all 0.15s;
+    }
+    .action-btn.approve { border-color: rgba(34,197,94,0.4); color: var(--success); background: rgba(34,197,94,0.08); }
+    .action-btn.approve:hover { background: rgba(34,197,94,0.2); }
+    .action-btn.reject { border-color: rgba(239,68,68,0.4); color: var(--danger); background: rgba(239,68,68,0.08); }
+    .action-btn.reject:hover { background: rgba(239,68,68,0.2); }
+    .action-btn.delete { border-color: rgba(239,68,68,0.3); color: #f87171; background: transparent; }
+    .action-btn.delete:hover { background: rgba(239,68,68,0.1); }
+    .action-btn.view-ss {
+      border-color: var(--glass-border); color: var(--white-dim); background: transparent;
+    }
+    .action-btn.view-ss:hover { color: var(--white); border-color: var(--white); }
+
+    /* Pagination */
+    .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 20px; }
+    .page-btn {
+      width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--glass-border);
+      background: transparent; color: var(--white-dim); font-size: 0.82rem;
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+    }
+    .page-btn.active { background: var(--net-gold); color: var(--court-blue); border-color: var(--net-gold); font-weight: 700; }
+    .page-btn:hover:not(.active) { border-color: var(--white-dim); color: var(--white); }
+
+    /* Screenshot modal */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+      z-index: 500; display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: var(--court-mid); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); max-width: 560px; width: 100%; overflow: hidden;
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 20px; border-bottom: 1px solid var(--glass-border);
+    }
+    .modal-header h3 { font-family: var(--font-display); font-size: 1.2rem; letter-spacing: 2px; }
+    .modal-close { background: none; border: none; color: var(--white-dim); font-size: 1.4rem; cursor: pointer; line-height: 1; }
+    .modal-close:hover { color: var(--white); }
+    .modal-body { padding: 20px; }
+    .modal-body img { width: 100%; border-radius: 8px; max-height: 400px; object-fit: contain; background: #000; }
+
+    /* No teams */
+    .no-teams { text-align: center; padding: 48px; color: var(--white-dim); }
+    .no-teams .icon { font-size: 3rem; margin-bottom: 12px; }
+
+    /* Section heading */
+    .section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .section-head h2 { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: 3px; }
+
+    /* Export btn */
+    .export-btn { display: flex; align-items: center; gap: 6px; }
+
+    @media (max-width: 1024px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 640px) {
+      .admin-main { padding: 16px; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login overlay -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="card login-card">
+    <div class="logo">VB<span>2026</span></div>
+    <div class="sub">Admin Panel · Restricted Access</div>
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input type="text" class="form-input" id="loginUser" placeholder="admin" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" id="loginPass" placeholder="••••••••" />
+      <div class="form-error" id="loginError" style="display:none;">Invalid credentials</div>
+    </div>
+    <button class="btn btn-primary w-full mt-16" id="loginBtn" style="justify-content:center;">
+      Enter Admin Panel →
+    </button>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">VB<span>2026</span></a>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <span style="font-size:0.78rem;color:var(--white-dim);">Admin Panel</span>
+    <button class="btn btn-ghost" id="logoutBtn" style="padding:8px 16px;font-size:0.82rem;">Logout</button>
+  </div>
+</nav>
+
+<div class="page" id="adminPanel" style="display:none;">
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Navigation</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="active" onclick="showSection('dashboard')">📊 Dashboard</a></li>
+        <li><a href="#" onclick="showSection('teams')">👥 Teams</a></li>
+        <li><a href="/api/admin/export">📥 Export CSV</a></li>
+      </ul>
+      <div style="margin-top:40px;">
+        <div class="sidebar-title">Quick Stats</div>
+        <div style="font-size:0.82rem; color:var(--white-dim); line-height:2;">
+          <div>Total: <span class="text-gold" id="sbTotal">—</span></div>
+          <div>Approved: <span style="color:var(--success)" id="sbApproved">—</span></div>
+          <div>Pending: <span style="color:var(--pending)" id="sbPending">—</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <!-- Dashboard section -->
+      <div id="sectionDashboard">
+        <div class="section-head">
+          <h2>DASHBOARD</h2>
+          <span class="text-dim" id="lastRefresh" style="font-size:0.78rem;"></span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="card stat-card">
+            <div class="stat-label">Total Teams</div>
+            <div class="stat-value gold" id="statTotal">—</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-label">Approved</div>
+            <div class="stat-value green" id="statApproved">—</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-label">Pending</div>
+            <div class="stat-value gold" id="statPending">—</div>
+          </div>
+          <div class="card stat-card">
+            <div class="stat-label">Slots Remaining</div>
+            <div class="stat-value blue" id="statRemaining">—</div>
+          </div>
+        </div>
+
+        <!-- Slot bar -->
+        <div class="card" style="margin-bottom:24px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+            <span style="font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--white-dim);">Slot Occupancy</span>
+            <span class="text-mono text-gold" id="slotFraction">— / 16</span>
+          </div>
+          <div class="slot-bar" style="height:14px;">
+            <div class="slot-bar-fill" id="dashSlotFill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Recent teams table -->
+        <div class="card">
+          <div class="section-head" style="margin-bottom:16px;">
+            <h2 style="font-size:1.2rem;letter-spacing:2px;">RECENT REGISTRATIONS</h2>
+          </div>
+          <table class="teams-table" id="recentTeamsTable">
+            <thead>
+              <tr>
+                <th>Team ID</th>
+                <th>Team Name</th>
+                <th>Captain</th>
+                <th>Status</th>
+                <th>Registered</th>
+              </tr>
+            </thead>
+            <tbody id="recentTeamsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Teams section -->
+      <div id="sectionTeams" style="display:none;">
+        <div class="section-head">
+          <h2>ALL TEAMS</h2>
+          <a href="/api/admin/export" class="btn btn-ghost export-btn">
+            ↓ Export CSV
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="table-controls">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍  Search teams, captain, phone…" />
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-filter="all">All</button>
+              <button class="filter-tab" data-filter="pending">Pending</button>
+              <button class="filter-tab" data-filter="approved">Approved</button>
+              <button class="filter-tab" data-filter="rejected">Rejected</button>
+            </div>
+          </div>
+
+          <div id="teamsTableWrap">
+            <table class="teams-table" id="allTeamsTable">
+              <thead>
+                <tr>
+                  <th>Team ID</th>
+                  <th>Team Name</th>
+                  <th>Captain</th>
+                  <th>Phone</th>
+                  <th>Size</th>
+                  <th>Hometown</th>
+                  <th>Payment</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="allTeamsTbody"></tbody>
+            </table>
+            <div class="no-teams" id="noTeams" style="display:none;">
+              <div class="icon">📭</div>
+              <p>No teams found</p>
+            </div>
+          </div>
+
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Screenshot modal -->
+<div class="modal-overlay" id="ssModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>PAYMENT SCREENSHOT</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <img id="modalImg" src="" alt="Payment proof" />
+      <p class="text-dim mt-16" style="font-size:0.8rem;" id="modalTeamInfo">—</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/admin.js"></script>
+</body>
+</html>
